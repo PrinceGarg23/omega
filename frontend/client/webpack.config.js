@@ -11,6 +11,7 @@ module.exports = {
     path: path.resolve(__dirname, "build"),
   },
   resolve: { extensions },
+  devtool: 'source-map',
   devServer: {
     client: {
       overlay: false,
@@ -20,6 +21,7 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/i,
+        enforce: 'pre',
         use: [
           {
             loader: "babel-loader",
@@ -34,6 +36,7 @@ module.exports = {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
+      
     ],
   },
   plugins: [
