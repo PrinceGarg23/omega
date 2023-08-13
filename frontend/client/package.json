@@ -12,7 +12,8 @@
     "react-dom": "^18.2.0",
     "react-loader-spinner": "^5.3.4",
     "react-router-dom": "^6.15.0",
-    "web3": "^1.8.2"
+    "url-rewrite": "^0.4.2",
+    "web3": "^1.10.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",

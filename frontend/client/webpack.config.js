@@ -16,6 +16,7 @@ module.exports = {
     client: {
       overlay: false,
     },
+
   },
   module: {
     rules: [
@@ -36,7 +37,7 @@ module.exports = {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
-      
+
     ],
   },
   plugins: [

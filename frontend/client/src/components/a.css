@@ -1,0 +1,44 @@
+/* components/ProductListingForm.css */
+.product-listing-card {
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+.product-listing-card h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #2874f0;
+    /* Flipkart blue */
+}
+
+.product-listing-card form {
+    display: grid;
+    gap: 10px;
+}
+
+.product-listing-card input,
+.product-listing-card textarea {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.product-listing-card button {
+    background-color: #2874f0;
+    /* Flipkart blue */
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.product-listing-card button:hover {
+    background-color: #1c56a3;
+    /* Darker shade of Flipkart blue */
+}

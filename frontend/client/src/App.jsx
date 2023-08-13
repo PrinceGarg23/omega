@@ -7,7 +7,7 @@ import SellerDashboard from './components/Dashboard/SellerDashboard';
 
 function App() {
   return (
-    <Router>
+    <Router basename='/'>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
