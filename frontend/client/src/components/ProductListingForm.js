@@ -33,6 +33,7 @@ function ProductListingForm() {
             setProductDescription('');
             setProductPrice('');
             setAvailableQuantity('');
+            alert("Product is listed.");
         } catch (error) {
             console.error('Error adding product:', error);
         }

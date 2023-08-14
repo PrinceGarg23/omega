@@ -4,6 +4,8 @@ import ProductListingForm from '../ProductListingForm';
 import Sidebar from './SideBar';
 // import { auth, firestore } from '../../firebase';
 import './SellerDashboard.css';
+import ReceivedOrders from '../ReceivedOrders';
+
 function SellerDashboard() {
 
   // const web3 = new Web3(window.ethereum);
@@ -34,6 +36,8 @@ function SellerDashboard() {
     switch (selectedSection) {
       case 'list-product':
         return <ProductListingForm />;
+      case 'received-orders':
+        return <ReceivedOrders />
       // Add more cases for other sections
       default:
         return null; // Default to no content

@@ -21,7 +21,7 @@ function ProductCard({ product }) {
                 const userId = auth.currentUser.uid;
                 const userDoc = await firestore.collection('users').doc(userId).get();
                 const cart = userDoc.data().cart || {};
-                console.log(product.productId);
+                // console.log(product.productId);
                 cart[product.productId] = { name: product.productName, desc: product.productDescription, quantity, price: product.productPrice };
                 await firestore.collection('users').doc(userId).update({ cart });
                 alert('Product added to cart!');

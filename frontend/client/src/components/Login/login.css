@@ -7,7 +7,7 @@
 }
 
 .login-card {
-  max-width: 600px;
+  width: 400px;
   padding: 20px;
   margin: 20px;
   border-radius: 10px;
@@ -39,6 +39,15 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.login-button div {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .login-button:hover {

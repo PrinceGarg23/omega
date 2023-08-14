@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { firestore, auth } from '../firebase';
 import './OrderHistory.css';
+import { TailSpin } from 'react-loader-spinner';
 
 function OrderHistory() {
     const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         const userId = auth.currentUser.uid;
         const ordersRef = firestore.collection('orders');
 
@@ -18,18 +21,21 @@ function OrderHistory() {
                     orderData.push({ id: doc.id, ...doc.data() });
                 });
                 setOrders(orderData);
+                setLoading(false);
             });
+
 
         return () => {
             unsubscribe();
         };
+
     }, []);
 
     // Render order history
     return (
         <div className="order-history">
             <h1>Order History</h1>
-            <ul className="order-list">
+            {loading ? <TailSpin height={50} width={50} /> : <ul className="order-list">
                 {orders.map((order) => (
                     <li className="order-item" key={order.id}>
                         <div className="order-details">
@@ -41,7 +47,8 @@ function OrderHistory() {
                     </li>
                 ))}
             </ul>
-        </div>
+            }
+        </div >
     );
 }
 

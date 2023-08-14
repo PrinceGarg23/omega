@@ -16,7 +16,7 @@ function BuyerDashboard() {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
-        console.log(user.uid);
+        // console.log(user.uid);
       } else {
         setUser(null);
       }
@@ -38,7 +38,7 @@ function BuyerDashboard() {
         return <OrderHistory />
       // Add more cases for other sections
       default:
-        return null; // Default to no content
+        return <ProductDisplay />; // Default to no content
     }
   };
 

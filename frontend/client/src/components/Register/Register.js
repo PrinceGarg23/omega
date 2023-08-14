@@ -4,23 +4,18 @@ import { useNavigate, Link } from 'react-router-dom';
 import './register.css';
 
 function Register() {
-  const [category, setCategory] = useState('buyer');
+  const [category, setCategory] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
 
-  const handleCategoryChange = (event) => {
-    setCategory(event.target.value);
-  };
-
   const handleRegistration = async () => {
     // Implement your registration logic here
     try {
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
-
       const userDocRef = firestore.collection('users').doc(user.uid);
       await userDocRef.set({
         category,
@@ -75,7 +70,7 @@ function Register() {
           className="register-input"
         />
         <select
-          onChange={(e) => handleCategoryChange(e.target.value)}
+          onChange={(e) => setCategory(e.target.value)}
           className="register-input"
         >
           <option value="" disabled>Select User Type</option>

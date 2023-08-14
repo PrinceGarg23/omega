@@ -4,10 +4,12 @@ import './Sidebar.css'; // Import the CSS file
 import { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import { auth, firestore } from '../../firebase';
+import { useNavigate } from 'react-router-dom';
 
 function Sidebar({ setSelectedSection }) {
 
     const web3 = new Web3(window.ethereum);
+    const navigate = useNavigate();
 
     const [isMetamaskConnected, setIsMetamaskConnected] = useState(false);
     const [isMetamaskAvailable, setIsMetamaskAvailable] = useState(true);
@@ -30,6 +32,14 @@ function Sidebar({ setSelectedSection }) {
         checkMetamaskConnection();
     }, [web3]);
 
+    const handleLogout = async () => {
+        try {
+            await auth.signOut();
+            navigate('/login');
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    };
 
     const connectToMetamask = async () => {
         try {
@@ -80,6 +90,9 @@ function Sidebar({ setSelectedSection }) {
                 </li>
                 <li>
                     <button onClick={() => setSelectedSection('orders')}>Orders</button>
+                </li>
+                <li>
+                    <button onClick={handleLogout}>Log Out</button>
                 </li>
             </ul>
         </div>

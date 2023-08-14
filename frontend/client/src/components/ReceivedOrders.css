@@ -1,0 +1,36 @@
+/* ReceivedOrders.css */
+
+.order-card {
+    border: 1px solid #ccc;
+    padding: 40px;
+    margin: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: block;
+    justify-content: space-between;
+    align-items: center;
+    font-size: large;
+}
+
+.order-details p {
+    margin: 10px;
+}
+
+.order-status {
+    font-weight: bold;
+    display: flex;
+    margin: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.confirm-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.confirm-button:hover {
+    background-color: #0056b3;
+}

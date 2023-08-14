@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { auth, firestore, firebase } from '../../firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import './login.css';
+import { TailSpin } from 'react-loader-spinner';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ function Login() {
 
       // Set the user type (seller/buyer) based on data from Firestore
       setUserType(userData.category);
-      console.log(userData.category);
+      // console.log(userData.category);
       setLoading(false);
 
       // Navigate to the appropriate dashboard based on the user's type
@@ -57,8 +58,8 @@ function Login() {
           onClick={handleLogin}
           // disabled={buttonDisabled}
           className="login-button"
-        >Sign In
-          {/* {loading ? <Loader type="TailSpin" color="#111" height={16} width={16} /> : 'Login'} */}
+        >
+          {loading ? <TailSpin height={25} width={25} /> : 'Sign in'}
         </button>
         <div className="register-links">
           <p>New here? <Link to="/register">Sign Up!</Link></p>

@@ -2,15 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { auth, firestore } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import './CartPage.css';
+import { TailSpin } from 'react-loader-spinner';
 
 function CartPage() {
     const [cartItems, setCartItems] = useState([]);
     const [userId, setUserId] = useState(null);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+
 
 
     const fetchCartItems = async () => {
         try {
+            setLoading(true);
             const userId = auth.currentUser.uid;
             const userDoc = await firestore.collection('users').doc(userId).get();
             const cart = userDoc.data().cart || {};
@@ -29,6 +33,7 @@ function CartPage() {
             }
 
             setCartItems(cartItemsData);
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching cart items:', error);
         }
@@ -83,6 +88,7 @@ function CartPage() {
 
     const placeOrder = async () => {
         try {
+            setLoading(true);
             const userDoc = await firestore.collection('users').doc(userId).get();
             const cart = userDoc.data().cart || {};
 
@@ -128,10 +134,12 @@ function CartPage() {
                 //console.log('Order to be added:', order);
 
                 await firestore.collection('orders').doc(orderId).set(order);
+                alert('Order Placed!!');
             }
 
             // Clear the cart after placing the order
             await firestore.collection('users').doc(userId).update({ cart: {} });
+
 
             // Update order history
             const orderHistory = userDoc.data().orderHistory || [];
@@ -140,6 +148,7 @@ function CartPage() {
 
             // Refresh the cart items after placing the order
             fetchCartItems();
+            setLoading(false);
         } catch (error) {
             console.error('Error placing order:', error);
         }
@@ -148,7 +157,7 @@ function CartPage() {
     return (
         <div className="cart-page">
             <h3>Your Cart</h3>
-            <div className="cart-items">
+            {loading ? <TailSpin height={50} width={50} /> : <div className="cart-items">
                 {cartItems.map((item) => (
                     <div key={item.id} className="cart-item">
                         {/* ... (other item details) */}
@@ -163,7 +172,7 @@ function CartPage() {
                         </div>
                     </div>
                 ))}
-            </div>
+            </div>}
             <p className="total-price">
                 Total Price: Rs {cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}
             </p>
