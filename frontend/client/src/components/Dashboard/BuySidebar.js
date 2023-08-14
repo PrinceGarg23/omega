@@ -78,6 +78,9 @@ function Sidebar({ setSelectedSection }) {
                 <li>
                     <button onClick={() => setSelectedSection('cart')}>Cart</button>
                 </li>
+                <li>
+                    <button onClick={() => setSelectedSection('orders')}>Orders</button>
+                </li>
             </ul>
         </div>
     );

@@ -1,0 +1,39 @@
+/* OrderHistory.css */
+
+.order-history {
+    max-width: 600px;
+    margin: 25px;
+}
+
+.order-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px;
+}
+
+.order-item {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.order-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-id {
+    font-weight: bold;
+}
+
+.order-status {
+    color: #007bff;
+}
+
+.order-total {
+    font-weight: bold;
+}
+
+/* Add more styles as needed */

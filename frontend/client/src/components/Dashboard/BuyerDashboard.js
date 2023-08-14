@@ -4,6 +4,7 @@ import { auth } from '../../firebase';
 import './BuyerDashboard.css';
 import ProductDisplay from '../ProductDisplay';
 import CartPage from '../CartPage';
+import OrderHistory from '../OrderHistory';
 import { Redirect } from 'react-router-dom';
 
 
@@ -33,6 +34,8 @@ function BuyerDashboard() {
         return <ProductDisplay />;
       case 'cart':
         return <CartPage />;
+      case 'orders':
+        return <OrderHistory />
       // Add more cases for other sections
       default:
         return null; // Default to no content
