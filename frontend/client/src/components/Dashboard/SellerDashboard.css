@@ -1,0 +1,48 @@
+#root,
+body {
+    width: 100vw;
+    height: 100vh;
+}
+
+.dashboard-content {
+    width: 100vw;
+    height: 100vh;
+}
+
+.sidebar {
+    float: left;
+    width: 20vw !important;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sidebar button:hover {
+    background-color: #e0e0e0;
+}
+
+.main-content {
+    height: 100vh;
+    width: 80vw;
+    float: right;
+    overflow: hidden;
+}

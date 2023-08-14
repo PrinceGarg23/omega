@@ -1,0 +1,25 @@
+/* ProductCard.css */
+.product-card {
+    width: 300px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: large;
+    display: inline-block;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.quantity-controls button {
+    padding: 5px 10px;
+    background-color: #f1f1f1;
+    border: none;
+    cursor: pointer;
+}

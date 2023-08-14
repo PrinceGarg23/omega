@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import BuyerDashboard from './components/Dashboard/BuyerDashboard';
 import SellerDashboard from './components/Dashboard/SellerDashboard';
+import { auth } from './firebase';
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
   return (
     <Router basename='/'>
       <Routes>

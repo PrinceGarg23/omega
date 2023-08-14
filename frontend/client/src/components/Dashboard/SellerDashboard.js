@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import Web3 from 'web3';
+import React, { useState } from 'react';
+// import Web3 from 'web3';
 import ProductListingForm from '../ProductListingForm';
 import Sidebar from './SideBar';
-import { auth, firestore } from '../../firebase';
-import './BuyerDashboard.css';
+// import { auth, firestore } from '../../firebase';
+import './SellerDashboard.css';
 function SellerDashboard() {
 
-  const web3 = new Web3(window.ethereum);
+  // const web3 = new Web3(window.ethereum);
   const [selectedSection, setSelectedSection] = useState('list-product');
 
-  const [isMetamaskConnected, setIsMetamaskConnected] = useState(false);
-  const [isMetamaskAvailable, setIsMetamaskAvailable] = useState(true);
+  // const [isMetamaskConnected, setIsMetamaskConnected] = useState(false);
+  // const [isMetamaskAvailable, setIsMetamaskAvailable] = useState(true);
 
-  useEffect(() => {
-    const checkMetamaskConnection = async () => {
-      try {
-        if (!window.ethereum) {
-          setIsMetamaskAvailable(false);
-          return;
-        }
+  // useEffect(() => {
+  //   const checkMetamaskConnection = async () => {
+  //     try {
+  //       if (!window.ethereum) {
+  //         setIsMetamaskAvailable(false);
+  //         return;
+  //       }
 
-        const accounts = await web3.eth.getAccounts();
-        setIsMetamaskConnected(accounts.length > 0);
-      } catch (error) {
-        console.error('Error checking Metamask connection:', error);
-      }
-    };
+  //       const accounts = await web3.eth.getAccounts();
+  //       setIsMetamaskConnected(accounts.length > 0);
+  //     } catch (error) {
+  //       console.error('Error checking Metamask connection:', error);
+  //     }
+  //   };
 
-    checkMetamaskConnection();
-  }, [web3]);
+  //   checkMetamaskConnection();
+  // }, [web3]);
 
   const renderSectionContent = () => {
     switch (selectedSection) {
@@ -40,29 +40,29 @@ function SellerDashboard() {
     }
   };
 
-  const connectToMetamask = async () => {
-    try {
-      if (!window.ethereum) {
-        console.log('Metamask extension is not available.');
-        return;
-      }
+  // const connectToMetamask = async () => {
+  //   try {
+  //     if (!window.ethereum) {
+  //       console.log('Metamask extension is not available.');
+  //       return;
+  //     }
 
-      await window.ethereum.enable();
-      const accounts = await web3.eth.getAccounts();
-      const userAddress = accounts[0];
+  //     await window.ethereum.enable();
+  //     const accounts = await web3.eth.getAccounts();
+  //     const userAddress = accounts[0];
 
-      // Store userAddress in Firestore
-      const userId = auth.currentUser.uid;
-      await firestore.collection('users').doc(userId).update({
-        ethereumAddress: userAddress,
-      });
+  //     // Store userAddress in Firestore
+  //     const userId = auth.currentUser.uid;
+  //     await firestore.collection('users').doc(userId).update({
+  //       ethereumAddress: userAddress,
+  //     });
 
-      setIsMetamaskConnected(true);
-      console.log('Connected to Metamask:', userAddress);
-    } catch (error) {
-      console.error('Error connecting to Metamask:', error);
-    }
-  };
+  //     setIsMetamaskConnected(true);
+  //     console.log('Connected to Metamask:', userAddress);
+  //   } catch (error) {
+  //     console.error('Error connecting to Metamask:', error);
+  //   }
+  // };
 
   // return (
   //   <div className="dashboard-content">
@@ -89,9 +89,8 @@ function SellerDashboard() {
     <div className="dashboard-content">
       <Sidebar setSelectedSection={setSelectedSection} />
       <div className="main-content">
-        <h2>Seller Dashboard</h2>
         {renderSectionContent()}
-        {isMetamaskAvailable ? (
+        {/* {isMetamaskAvailable ? (
           <button
             onClick={connectToMetamask}
             className={`connect-button ${isMetamaskConnected ? 'connected' : ''}`}
@@ -101,7 +100,7 @@ function SellerDashboard() {
           </button>
         ) : (
           <p className='warn'>Metamask extension is not available. Please add the Metamask extension.</p>
-        )}
+        )} */}
       </div>
     </div>
   );

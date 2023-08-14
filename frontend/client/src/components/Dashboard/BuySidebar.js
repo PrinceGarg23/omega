@@ -56,7 +56,7 @@ function Sidebar({ setSelectedSection }) {
     };
     return (
         <div className="sidebar">
-            <h3>Dashboard</h3>
+            <h3>Buyer Dashboard</h3>
             <ul>
 
                 <li>
@@ -73,7 +73,10 @@ function Sidebar({ setSelectedSection }) {
                     )}
                 </li>
                 <li>
-                    <button onClick={() => setSelectedSection('list-product')}>List Product</button>
+                    <button onClick={() => setSelectedSection('display-product')}>Home</button>
+                </li>
+                <li>
+                    <button onClick={() => setSelectedSection('cart')}>Cart</button>
                 </li>
             </ul>
         </div>

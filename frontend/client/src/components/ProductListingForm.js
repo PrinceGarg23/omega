@@ -15,7 +15,7 @@ function ProductListingForm() {
         const userId = auth.currentUser.uid;
 
         try {
-            await firestore.collection('products').add({
+            const ref = await firestore.collection('products').add({
                 sellerId: userId,
                 productName,
                 productDescription,
@@ -24,10 +24,15 @@ function ProductListingForm() {
                 createdAt: new Date(),
             });
 
+            const productDocId = ref.id;
+            await ref.update({
+                productId: productDocId
+            });
             // Clear the form after submission
             setProductName('');
             setProductDescription('');
             setProductPrice('');
+            setAvailableQuantity('');
         } catch (error) {
             console.error('Error adding product:', error);
         }
