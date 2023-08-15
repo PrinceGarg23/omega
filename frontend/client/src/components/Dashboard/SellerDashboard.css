@@ -44,5 +44,5 @@ body {
     height: 100vh;
     width: 80vw;
     float: right;
-    overflow: hidden;
+    overflow-y: auto;
 }
