@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import './register.css';
 
 function Register() {
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('buyer');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -73,7 +73,6 @@ function Register() {
           onChange={(e) => setCategory(e.target.value)}
           className="register-input"
         >
-          <option value="" disabled>Select User Type</option>
           <option value="buyer">Buyer</option>
           <option value="seller">Seller</option>
         </select>

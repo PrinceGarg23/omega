@@ -1,16 +1,31 @@
-import React, { useState } from 'react';
-// import Web3 from 'web3';
+import React, { useEffect, useState } from 'react';
+import Web3 from 'web3';
 import ProductListingForm from '../ProductListingForm';
 import Sidebar from './SideBar';
 // import { auth, firestore } from '../../firebase';
 import './SellerDashboard.css';
 import ReceivedOrders from '../ReceivedOrders';
+import LoyaltyTokenABI from '../../contracts/LoyaltyToken.json';
 
 function SellerDashboard() {
 
   // const web3 = new Web3(window.ethereum);
   const [selectedSection, setSelectedSection] = useState('list-product');
 
+  useEffect(() => {
+    async function checkContract() {
+      try {
+        const web3 = new Web3('http://localhost:9545');
+        const contractAddress = '0x34d3aEA61363c9328C8f75dAE13afa80d1220b8c';
+        const loyaltyToken = new web3.eth.Contract(LoyaltyTokenABI.abi, contractAddress);
+        const rate = await loyaltyToken.methods.conversionRate().call();
+        console.log(rate);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    checkContract();
+  }, []);
   // const [isMetamaskConnected, setIsMetamaskConnected] = useState(false);
   // const [isMetamaskAvailable, setIsMetamaskAvailable] = useState(true);
 

@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "../node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
-contract ExpirableToken is ERC20, Ownable {
+contract LoyaltyToken is ERC20, Ownable {
     struct BuyerInfo {
         uint256 lastUsageTimestamp;
     }
@@ -18,7 +18,7 @@ contract ExpirableToken is ERC20, Ownable {
     uint256 public burnedTokenCount;
     uint256 public constant MAX_SUPPLY = 1e10;
 
-    uint256 public decayInterval = 30 days; // You can adjust the interval
+    uint256 public decayInterval = 1 minutes; // You can adjust the interval
     uint256 public decayRate = 10; // Percentage of balance to decay per interval
 
     constructor(string memory name, string memory symbol) ERC20(name, symbol) {}
@@ -39,6 +39,11 @@ contract ExpirableToken is ERC20, Ownable {
         _;
     }
 
+    modifier onlyBuyer() {
+        require(buyerAddresses[msg.sender], "Sender is not allowed");
+        _;
+    }
+
     function setConversionRate(uint256 rate) public onlyOwner {
         conversionRate = rate;
     }
@@ -47,7 +52,7 @@ contract ExpirableToken is ERC20, Ownable {
         sharedWallet = wallet;
     }
 
-    function addToWhitelist(address account) public onlyOwner {
+    function addToWhitelist(address account) public {
         whitelistedAddresses[account] = true;
     }
 
@@ -55,7 +60,7 @@ contract ExpirableToken is ERC20, Ownable {
         whitelistedAddresses[account] = false;
     }
 
-    function addToBuyerAddresses(address account) public onlyOwner {
+    function addToBuyerAddresses(address account) public {
         buyerAddresses[account] = true;
     }
 
@@ -63,7 +68,7 @@ contract ExpirableToken is ERC20, Ownable {
         buyerAddresses[account] = false;
     }
 
-    function mintToSharedWallet(uint256 amount) public onlyOwnerOrWhitelist {
+    function mintToSharedWallet(uint256 amount) public onlyOwner {
         require(sharedWallet != address(0), "Shared wallet not set");
         require(amount > 0, "Amount must be greater than zero");
 
@@ -77,7 +82,7 @@ contract ExpirableToken is ERC20, Ownable {
         require(recipient != address(0), "Invalid recipient address");
 
         _transfer(sharedWallet, recipient, amount);
-        //buyerInfo[recipient].lastUsageTimestamp = block.timestamp;
+        buyerInfo[recipient].lastUsageTimestamp = block.timestamp;
     }
 
     function rewardBuyerWithPredefinedAmount(
@@ -87,7 +92,7 @@ contract ExpirableToken is ERC20, Ownable {
         require(amount > 0, "Amount must be greater than zero");
 
         _transfer(sharedWallet, recipient, amount);
-        //buyerInfo[recipient].lastUsageTimestamp = block.timestamp;
+        buyerInfo[recipient].lastUsageTimestamp = block.timestamp;
     }
 
     // function redeemDiscount(uint256 tokensToRedeem) public {
@@ -104,7 +109,7 @@ contract ExpirableToken is ERC20, Ownable {
     //     buyerInfo[msg.sender].lastUsageTimestamp = block.timestamp;
     // }
 
-    function redeemDiscount(uint256 tokensToRedeem) public {
+    function redeemDiscount(uint256 tokensToRedeem) public onlyBuyer {
         require(
             buyerAddresses[msg.sender],
             "Only whitelisted addresses can redeem discounts"
@@ -117,7 +122,7 @@ contract ExpirableToken is ERC20, Ownable {
 
         // Compute discountAmount if needed for any other operations (e.g., logging, computation, etc.)
         uint256 discountAmount = tokensToRedeem * conversionRate;
-
+        burnedTokenCount += tokensToRedeem;
         // Burn tokens directly from the buyer's address
         _burn(msg.sender, tokensToRedeem);
 
@@ -154,8 +159,8 @@ contract ExpirableToken is ERC20, Ownable {
         if (
             buyerAddresses[account] && buyerInfo[account].lastUsageTimestamp > 0
         ) {
-            uint256 elapsedIntervals = (block.timestamp -
-                buyerInfo[account].lastUsageTimestamp) / decayInterval;
+            uint256 elapsedIntervals = ((block.timestamp -
+                buyerInfo[account].lastUsageTimestamp) * 1000) / decayInterval;
             uint256 decayedAmount = ((balanceOf(account) * decayRate) / 100) *
                 elapsedIntervals;
             if (decayedAmount > 0) {
@@ -169,7 +174,7 @@ contract ExpirableToken is ERC20, Ownable {
         require(tokensToMint > 0, "No burned tokens to mint");
 
         if (totalSupply() + tokensToMint <= MAX_SUPPLY) {
-            _mint(owner(), tokensToMint);
+            _mint(sharedWallet, tokensToMint);
             burnedTokenCount = 0;
         }
     }
