@@ -2,88 +2,175 @@
 pragma solidity ^0.8.0;
 
 import "../node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
-contract LoyaltyToken is ERC20 {
-    address private owner;
-    mapping(address => bool) private sellers;
-    mapping(address => uint256) private lastActionTimestamp;
-    mapping(address => uint256) private redeemableTokens;
-
-    uint256 public tokenDecayPeriod = 1 weeks; // Decay period is set to 1 week
-
-    constructor(
-        string memory _name,
-        string memory _symbol
-    ) ERC20(_name, _symbol) {
-        owner = msg.sender;
+contract ExpirableToken is ERC20, Ownable {
+    struct BuyerInfo {
+        uint256 lastUsageTimestamp;
     }
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only the owner can call this function");
-        _;
-    }
+    mapping(address => bool) public whitelistedAddresses;
+    mapping(address => bool) public buyerAddresses;
+    mapping(address => BuyerInfo) public buyerInfo;
 
-    modifier onlySeller() {
+    uint256 public conversionRate = 1;
+    address public sharedWallet;
+    uint256 public burnedTokenCount;
+    uint256 public constant MAX_SUPPLY = 1e10;
+
+    uint256 public decayInterval = 30 days; // You can adjust the interval
+    uint256 public decayRate = 10; // Percentage of balance to decay per interval
+
+    constructor(string memory name, string memory symbol) ERC20(name, symbol) {}
+
+    modifier onlyTransferAllowed() {
         require(
-            sellers[msg.sender],
-            "Only authorized sellers can call this function"
+            whitelistedAddresses[msg.sender],
+            "Sender is not allowed to transfer"
         );
         _;
     }
 
-    function addSeller(address seller) public onlyOwner {
-        sellers[seller] = true;
-    }
-
-    function removeSeller(address seller) public onlyOwner {
-        sellers[seller] = false;
-    }
-
-    function mintToPool(uint256 amount) public onlyOwner {
-        _mint(address(this), amount);
-    }
-
-    function setTokenDecayPeriod(uint256 period) public onlyOwner {
-        tokenDecayPeriod = period;
-    }
-
-    function issueTokens(address buyer, uint256 amount) public onlySeller {
+    modifier onlyOwnerOrWhitelist() {
         require(
-            balanceOf(address(this)) >= amount,
-            "Insufficient tokens in the pool"
+            msg.sender == owner() || whitelistedAddresses[msg.sender],
+            "Sender is not allowed"
         );
-        _transfer(address(this), buyer, amount);
-        lastActionTimestamp[buyer] = block.timestamp;
-        redeemableTokens[buyer] += amount;
+        _;
     }
 
-    function updateTokens(address account) internal {
-        uint256 elapsedTime = block.timestamp - lastActionTimestamp[account];
-        uint256 decayedTokens = (balanceOf(account) * elapsedTime) /
-            tokenDecayPeriod;
-        redeemableTokens[account] =
-            redeemableTokens[account] +
-            balanceOf(account) -
-            decayedTokens;
-        lastActionTimestamp[account] = block.timestamp;
+    function setConversionRate(uint256 rate) public onlyOwner {
+        conversionRate = rate;
     }
 
-    function getEarnedTokens(address buyer) public returns (uint256) {
-        updateTokens(buyer); // Update tokens before calculation
-        return redeemableTokens[buyer];
+    function setSharedWallet(address wallet) public onlyOwner {
+        sharedWallet = wallet;
     }
 
-    function getRedeemableTokens(address buyer) public view returns (uint256) {
-        return redeemableTokens[buyer];
+    function addToWhitelist(address account) public onlyOwner {
+        whitelistedAddresses[account] = true;
     }
 
-    function redeemTokens(uint256 amount) public {
+    function removeFromWhitelist(address account) public onlyOwner {
+        whitelistedAddresses[account] = false;
+    }
+
+    function addToBuyerAddresses(address account) public onlyOwner {
+        buyerAddresses[account] = true;
+    }
+
+    function removeFromBuyerAddresses(address account) public onlyOwner {
+        buyerAddresses[account] = false;
+    }
+
+    function mintToSharedWallet(uint256 amount) public onlyOwnerOrWhitelist {
+        require(sharedWallet != address(0), "Shared wallet not set");
+        require(amount > 0, "Amount must be greater than zero");
+
+        _mint(sharedWallet, amount);
+    }
+
+    function rewardBuyer(
+        address recipient,
+        uint256 amount
+    ) public onlyOwnerOrWhitelist {
+        require(recipient != address(0), "Invalid recipient address");
+
+        _transfer(sharedWallet, recipient, amount);
+        //buyerInfo[recipient].lastUsageTimestamp = block.timestamp;
+    }
+
+    function rewardBuyerWithPredefinedAmount(
+        address recipient,
+        uint256 amount
+    ) public onlyOwner {
+        require(amount > 0, "Amount must be greater than zero");
+
+        _transfer(sharedWallet, recipient, amount);
+        //buyerInfo[recipient].lastUsageTimestamp = block.timestamp;
+    }
+
+    // function redeemDiscount(uint256 tokensToRedeem) public {
+    //     require(buyerAddresses[msg.sender], "Only whitelisted addresses can redeem discounts");
+    //     require(tokensToRedeem > 0, "Invalid token amount");
+
+    //     uint256 maxRedeemableTokens = balanceOf(sharedWallet);
+    //     require(tokensToRedeem <= maxRedeemableTokens, "Exceeds available tokens for redemption");
+
+    //     uint256 discountAmount = tokensToRedeem * conversionRate;
+    //     _burn(sharedWallet, tokensToRedeem);
+
+    //     // Update the last usage timestamp upon redeeming discount
+    //     buyerInfo[msg.sender].lastUsageTimestamp = block.timestamp;
+    // }
+
+    function redeemDiscount(uint256 tokensToRedeem) public {
         require(
-            redeemableTokens[msg.sender] >= amount,
-            "Not enough redeemable tokens"
+            buyerAddresses[msg.sender],
+            "Only whitelisted addresses can redeem discounts"
         );
-        updateTokens(msg.sender); // Update tokens before redeeming
-        redeemableTokens[msg.sender] -= amount;
-        _burn(msg.sender, amount);
+        require(tokensToRedeem > 0, "Invalid token amount");
+        require(
+            tokensToRedeem <= balanceOf(msg.sender),
+            "Exceeds tokens available in sender's wallet"
+        );
+
+        // Compute discountAmount if needed for any other operations (e.g., logging, computation, etc.)
+        uint256 discountAmount = tokensToRedeem * conversionRate;
+
+        // Burn tokens directly from the buyer's address
+        _burn(msg.sender, tokensToRedeem);
+
+        // Update the last usage timestamp upon redeeming discount
+        buyerInfo[msg.sender].lastUsageTimestamp = block.timestamp;
+    }
+
+    function burnExpiredTokens(address account) public onlyOwner {
+        uint256 tokensToBurn = balanceOf(account);
+        burnedTokenCount += tokensToBurn;
+        _burn(account, tokensToBurn);
+    }
+
+    function transfer(
+        address recipient,
+        uint256 amount
+    ) public override onlyTransferAllowed returns (bool) {
+        decayTokens(msg.sender);
+        decayTokens(recipient);
+        return super.transfer(recipient, amount);
+    }
+
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) public override onlyTransferAllowed returns (bool) {
+        decayTokens(sender);
+        decayTokens(recipient);
+        return super.transferFrom(sender, recipient, amount);
+    }
+
+    function decayTokens(address account) internal {
+        if (
+            buyerAddresses[account] && buyerInfo[account].lastUsageTimestamp > 0
+        ) {
+            uint256 elapsedIntervals = (block.timestamp -
+                buyerInfo[account].lastUsageTimestamp) / decayInterval;
+            uint256 decayedAmount = ((balanceOf(account) * decayRate) / 100) *
+                elapsedIntervals;
+            if (decayedAmount > 0) {
+                _burn(account, decayedAmount);
+            }
+        }
+    }
+
+    function automateMinting() public onlyOwner {
+        uint256 tokensToMint = burnedTokenCount;
+        require(tokensToMint > 0, "No burned tokens to mint");
+
+        if (totalSupply() + tokensToMint <= MAX_SUPPLY) {
+            _mint(owner(), tokensToMint);
+            burnedTokenCount = 0;
+        }
     }
 }
