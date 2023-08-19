@@ -64,9 +64,9 @@ function Sidebar({ setSelectedSection }) {
             // console.log("firebase:", firebaseAddress);
             // console.log("user : ", userAddress);
 
-            if (firebaseAddress == userAddress) {
+            if (firebaseAddress === userAddress) {
                 setIsMetamaskConnected(true);
-            } else if (firebaseAddress == '') {
+            } else if (firebaseAddress === '') {
 
                 // Store userAddress in Firestore
                 const userId = auth.currentUser.uid;
@@ -134,7 +134,6 @@ function Sidebar({ setSelectedSection }) {
                 }
             });
         }
-
 
     }, []);
 

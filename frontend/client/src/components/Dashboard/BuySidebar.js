@@ -7,6 +7,9 @@ import { auth, firestore } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import { TailSpin } from 'react-loader-spinner';
 import LoyaltyToken from '../../contracts/LoyaltyToken.json';
+import { Network, Alchemy } from 'alchemy-sdk';
+
+
 
 function Sidebar({ setSelectedSection }) {
 
@@ -14,7 +17,11 @@ function Sidebar({ setSelectedSection }) {
     const contractAddress = '0x34d3aEA61363c9328C8f75dAE13afa80d1220b8c';
     const loyaltyToken = new web3.eth.Contract(LoyaltyToken.abi, contractAddress);
     const navigate = useNavigate();
-
+    const settings = {
+        apiKey: "jDRCPecaBjr68GV-IgQOnxZybjFNpCSg",
+        network: Network.MATIC_MUMBAI,
+    };
+    const alchemy = new Alchemy(settings);
 
     const [isMetamaskConnected, setIsMetamaskConnected] = useState(false);
     const [isMetamaskAvailable, setIsMetamaskAvailable] = useState(true);
@@ -59,9 +66,9 @@ function Sidebar({ setSelectedSection }) {
             const accounts = await web3.eth.getAccounts();
             const userAddress = accounts[0];
 
-            if (firebaseAddress == userAddress) {
+            if (firebaseAddress === userAddress) {
                 setIsMetamaskConnected(true);
-            } else if (firebaseAddress == '') {
+            } else if (firebaseAddress === '') {
 
                 // Store userAddress in Firestore
                 const userId = auth.currentUser.uid;

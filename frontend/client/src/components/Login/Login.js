@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { auth, firestore, firebase } from '../../firebase';
+import { auth, firestore } from '../../firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import './login.css';
 import { TailSpin } from 'react-loader-spinner';
@@ -8,7 +8,7 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const [userType, setUserType] = useState('');
+  // const [userType, setUserType] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
@@ -20,7 +20,7 @@ function Login() {
       const userData = userDoc.data();
 
       // Set the user type (seller/buyer) based on data from Firestore
-      setUserType(userData.category);
+      // setUserType(userData.category);
       // console.log(userData.category);
       setLoading(false);
 
