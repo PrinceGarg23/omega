@@ -134,6 +134,9 @@ function Sidebar({ setSelectedSection }) {
     }, []);
     return (
         <div className="sidebar">
+            <div className='logo'>
+                <img src='Flip.png' alt='' />
+            </div>
             <h3>Buyer Dashboard</h3>
             <ul>
 

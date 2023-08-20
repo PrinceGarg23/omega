@@ -19,8 +19,9 @@ function LoyaltyPointsPage() {
 
     const [userId, setUserId] = useState(null);
     const [tokenBalance, setTokenBalance] = useState(0);
-    const [showTokenHistory, setShowTokenHistory] = useState(true);
+    const [showTokenHistory, setShowTokenHistory] = useState(false);
     const [showRedeemSection, setShowRedeemSection] = useState(false);
+    const [showAboutSection, setShowAboutSection] = useState(true);
     const [tokenHistory, setTokenHistory] = useState([]);
     // const [selectedProduct, setSelectedProduct] = useState(null);
     const [selectedProductId, setSelectedProductId] = useState(null);
@@ -139,10 +140,21 @@ function LoyaltyPointsPage() {
             </div>
             <div className="toggle-buttons">
                 <button
+                    className={`toggle-button ${showAboutSection ? 'active' : ''}`}
+                    onClick={() => {
+                        setShowTokenHistory(false);
+                        setShowRedeemSection(false); // Deactivate the other section
+                        setShowAboutSection(true);
+                    }}
+                >
+                    About
+                </button>&nbsp;
+                <button
                     className={`toggle-button ${showTokenHistory ? 'active' : ''}`}
                     onClick={() => {
-                        setShowTokenHistory(!showTokenHistory);
+                        setShowTokenHistory(true);
                         setShowRedeemSection(false); // Deactivate the other section
+                        setShowAboutSection(false);
                     }}
                 >
                     Show Token History
@@ -150,13 +162,38 @@ function LoyaltyPointsPage() {
                 <button
                     className={`toggle-button ${showRedeemSection ? 'active' : ''}`}
                     onClick={() => {
-                        setShowRedeemSection(!showRedeemSection);
+                        setShowRedeemSection(true);
                         setShowTokenHistory(false); // Deactivate the other section
+                        setShowAboutSection(false);
                     }}
                 >
                     Redeem Tokens
                 </button>
             </div>
+
+            {showAboutSection && (
+                <div className="about">
+                    <h1>INTRODUCTION</h1>
+                    <h2>FlipKΩin, harnessed through cutting-edge blockchain technology, stands as a distinctive interchangeable token designed to serve as a reward mechanism for our loyal customers.</h2>
+                    <h3>Eligibility to become a Loyal Customer</h3>
+                    <p>1. Minimum 3 Purchases.<br />
+                        2. Minimum Rs.3000 purchase value in total.</p>
+                    <p>Fulfill the above requirements to become a loyal customer and start getting rewards now.</p>
+                    <h3>How to earn FlipKΩin?</h3>
+                    <p>1. Become a Loyal Customer.<br />
+                        2. Get rewarded upto 100 tokens on each purchase.<br />
+                        3. Earn tokens through Referrals.(Must use your referral ID)<br />
+                    </p>
+                    <h3>How can you Redeem Tokens?</h3>
+                    <p>
+                        1. You can directly purchase Subsidised Products through your tokens.<br />
+                        2. Get Subscriptions of your favourite OTT Platform in exchange of your tokens.<br />
+                        3. Become a Flipkart Plus Member at a discounted price through your tokens.
+                    </p>
+
+                </div>
+            )}
+
             {showTokenHistory && (
                 <div className="token-history">
                     <h1>Token Earning History</h1>

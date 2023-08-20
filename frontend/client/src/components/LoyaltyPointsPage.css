@@ -131,7 +131,25 @@ h2 {
 }
 
 .product-image img {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     border-radius: 5px;
+}
+
+.about h1 {
+    font-size: 30px;
+    margin-left: 35%;
+    margin-right: 45%;
+}
+
+.about h2 {
+    font-size: 25px;
+}
+
+.about h3 {
+    font-size: 20px;
+}
+
+.about p {
+    font-size: 17px;
 }
