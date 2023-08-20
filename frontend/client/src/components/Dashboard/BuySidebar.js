@@ -164,6 +164,9 @@ function Sidebar({ setSelectedSection }) {
                     <button onClick={() => setSelectedSection('orders')}>Orders</button>
                 </li>
                 <li>
+                    <button onClick={() => setSelectedSection('loyalty')}>Loyalty Points</button>
+                </li>
+                <li>
                     <button onClick={handleLogout}>Log Out</button>
                 </li>
             </ul>

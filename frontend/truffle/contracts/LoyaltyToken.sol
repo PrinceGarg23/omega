@@ -121,7 +121,7 @@ contract LoyaltyToken is ERC20, Ownable {
         );
 
         // Compute discountAmount if needed for any other operations (e.g., logging, computation, etc.)
-        uint256 discountAmount = tokensToRedeem * conversionRate;
+        // uint256 discountAmount = tokensToRedeem * conversionRate;
         burnedTokenCount += tokensToRedeem;
         // Burn tokens directly from the buyer's address
         _burn(msg.sender, tokensToRedeem);

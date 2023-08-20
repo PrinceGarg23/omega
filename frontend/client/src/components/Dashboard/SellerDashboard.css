@@ -23,6 +23,7 @@ body {
 
 .sidebar li {
     margin-bottom: 10px;
+    font-size: large;
 }
 
 .sidebar button {
@@ -45,4 +46,5 @@ body {
     width: 80vw;
     float: right;
     overflow-y: auto;
+    background-color: #f2efea;
 }

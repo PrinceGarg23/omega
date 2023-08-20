@@ -34,3 +34,19 @@
 .confirm-button:hover {
     background-color: #0056b3;
 }
+
+.loyalty-reward-button {
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.reward-button {
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}

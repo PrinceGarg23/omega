@@ -37,16 +37,33 @@ function ProductCard({ product }) {
     };
 
     return (
+        // <div className="product-card">
+        //     <h3>{product.productName.toUpperCase()}</h3>
+        //     <p>{product.productDescription}</p>
+        //     <p>Price: Rs {product.productPrice} </p>
+        //     <div className="quantity-controls">
+        //         <button onClick={decreaseQuantity}>-</button>
+        //         <span>{quantity}</span>
+        //         <button onClick={increaseQuantity}>+</button>
+        //     </div>
+        //     <button onClick={addToCart}>Add to Cart</button>
+        // </div>
+
         <div className="product-card">
-            <h3>{product.productName.toUpperCase()}</h3>
-            <p>{product.productDescription}</p>
-            <p>Price: Rs {product.productPrice} </p>
-            <div className="quantity-controls">
-                <button onClick={decreaseQuantity}>-</button>
-                <span>{quantity}</span>
-                <button onClick={increaseQuantity}>+</button>
+            <div className="product-image">
+                <img src={product.image} alt={product.productName} />
             </div>
-            <button onClick={addToCart}>Add to Cart</button>
+            <div className="product-details">
+                <h3>{product.productName.toUpperCase()}</h3>
+                <p>{product.productDescription}</p>
+                <p>Price: Rs {product.productPrice} </p>
+                <div className="quantity-controls">
+                    <button onClick={decreaseQuantity}>-</button>
+                    <span>{quantity}</span>
+                    <button onClick={increaseQuantity}>+</button>
+                </div>
+                <button onClick={addToCart}>Add to Cart</button>
+            </div>
         </div>
     );
 }

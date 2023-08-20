@@ -10,6 +10,7 @@
 
 .sidebar li {
     margin-bottom: 10px;
+    font-size: large;
 }
 
 .sidebar button {
@@ -29,4 +30,5 @@
 
 .main-content {
     overflow-y: auto;
+    background-color: #f2efea;
 }

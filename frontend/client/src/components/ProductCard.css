@@ -1,4 +1,3 @@
-/* ProductCard.css */
 h1 {
     margin: 25px;
 }
@@ -13,6 +12,12 @@ h1 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-size: large;
     display: inline-block;
+}
+
+
+.product-image img {
+    max-width: 300px;
+    max-height: 400px;
 }
 
 .quantity-controls {

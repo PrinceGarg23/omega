@@ -5,7 +5,7 @@ import './BuyerDashboard.css';
 import ProductDisplay from '../ProductDisplay';
 import CartPage from '../CartPage';
 import OrderHistory from '../OrderHistory';
-import { Redirect } from 'react-router-dom';
+import LoyaltyPointsPage from '../LoyaltyPointsPage';
 
 
 function BuyerDashboard() {
@@ -36,6 +36,8 @@ function BuyerDashboard() {
         return <CartPage />;
       case 'orders':
         return <OrderHistory />
+      case 'loyalty':
+        return <LoyaltyPointsPage />
       // Add more cases for other sections
       default:
         return <ProductDisplay />; // Default to no content
